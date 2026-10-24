@@ -1,0 +1,21 @@
+id,task,owner,email,due_date,priority,status,source_meeting
+T-001,Publish project charter and RACI matrix,Sara Al-Qahtani,sara.alqahtani@example.com,2026-09-18,High,Done,project_kickoff.txt
+T-002,"Set up backend repo, CI pipeline and dev environment",Ali Hassan,ali.hassan@example.com,2026-09-25,High,Done,project_kickoff.txt
+T-003,Order 50 pilot sensors for the KAFD test lot,Omar Farooq,omar.farooq@example.com,2026-09-30,High,Done,project_kickoff.txt
+T-004,Deliver low-fidelity wireframes for the map and booking flow,Lina Haddad,lina.haddad@example.com,2026-10-02,Medium,Done,project_kickoff.txt
+T-005,Scaffold the Flutter app with Arabic/English localization,Noura Al-Harbi,noura.alharbi@example.com,2026-10-05,Medium,Done,project_kickoff.txt
+T-006,Share municipality parking zone GIS data,Fahad Al-Dosari,fahad.aldosari@example.com,2026-09-28,High,Done,project_kickoff.txt
+T-007,Draft the QA test strategy,Khalid Al-Mutairi,khalid.almutairi@example.com,2026-10-09,Medium,Done,project_kickoff.txt
+T-008,Confirm payment gateway vendor for Mada and Apple Pay,Sara Al-Qahtani,sara.alqahtani@example.com,2026-10-15,High,In Progress,project_kickoff.txt
+T-009,Document data residency and PDPL compliance approach,Ali Hassan,ali.hassan@example.com,2026-10-28,Medium,Not Started,project_kickoff.txt
+T-010,Finalize high-fidelity UI designs in Figma,Lina Haddad,lina.haddad@example.com,2026-10-19,High,Done,stakeholder_sync.txt
+T-011,Build real-time availability API over WebSockets,Ali Hassan,ali.hassan@example.com,2026-10-25,High,In Progress,stakeholder_sync.txt
+T-012,Install and calibrate sensors in the KAFD test lot,Omar Farooq,omar.farooq@example.com,2026-10-21,High,Blocked,stakeholder_sync.txt
+T-013,Implement the live parking map screen,Noura Al-Harbi,noura.alharbi@example.com,2026-10-26,High,In Progress,stakeholder_sync.txt
+T-014,Obtain site access permits for the Olaya zone,Fahad Al-Dosari,fahad.aldosari@example.com,2026-10-16,High,In Progress,stakeholder_sync.txt
+T-015,Set up automated test suite in CI,Khalid Al-Mutairi,khalid.almutairi@example.com,2026-10-25,Medium,In Progress,stakeholder_sync.txt
+T-016,Prepare the steering committee demo deck,Sara Al-Qahtani,sara.alqahtani@example.com,2026-10-30,Medium,Not Started,stakeholder_sync.txt
+T-017,Integrate Mada and Apple Pay sandbox,Noura Al-Harbi,noura.alharbi@example.com,2026-11-06,High,Not Started,stakeholder_sync.txt
+T-018,Run usability test with 5 Riyadh drivers,Lina Haddad,lina.haddad@example.com,2026-11-03,Medium,Not Started,stakeholder_sync.txt
+T-019,Finish API docs,Ali Hassan,ali.hassan@example.com,2026-11-05,Medium,In Progress,sprint_review.txt
+T-020,Fix sensor false positives caused by afternoon heat,Omar Farooq,omar.farooq@example.com,2026-10-26,High,In Progress,sprint_review.txt

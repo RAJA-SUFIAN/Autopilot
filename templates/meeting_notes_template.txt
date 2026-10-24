@@ -1,0 +1,20 @@
+TITLE: <Meeting name, e.g. Weekly Sync - My Project>
+DATE: <YYYY-MM-DD>
+ATTENDEES: <Full Name> <email@company.com>, <Full Name> <email@company.com>
+
+SUMMARY: <2-4 sentences: what was discussed and the overall outcome.>
+
+DISCUSSION
+- <Free-form notes. Anything without a TAG: prefix is just context.>
+- <With a GEMINI_API_KEY set, you can skip the tags entirely and write naturally.>
+
+DECISION: <One decision per line.>
+DECISION: <Another decision.>
+
+ACTION: <Owner first name or full name> - <what needs to be done> - <YYYY-MM-DD> - <High|Medium|Low>
+ACTION: <Owner> - <task> - <YYYY-MM-DD>
+
+# How to use:
+# 1. Copy this file into meetings/, e.g. meetings/2026-11-02_weekly_sync.txt
+# 2. Fill it in (owners are matched to ATTENDEES by name to find their email; priority is optional)
+# 3. Run: python main.py process meetings/2026-11-02_weekly_sync.txt

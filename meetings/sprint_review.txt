@@ -1,0 +1,24 @@
+TITLE: Sprint 3 Review - Riyadh Smart Parking App
+DATE: 2026-10-22
+ATTENDEES: Sara Al-Qahtani <sara.alqahtani@example.com>, Ali Hassan <ali.hassan@example.com>, Noura Al-Harbi <noura.alharbi@example.com>, Omar Farooq <omar.farooq@example.com>, Lina Haddad <lina.haddad@example.com>, Khalid Al-Mutairi <khalid.almutairi@example.com>, Fahad Al-Dosari <fahad.aldosari@example.com>
+
+SUMMARY: Sprint 3 delivered the final high-fidelity designs, the first version of the availability API and a working map screen on test devices. Sensor installation in KAFD is blocked waiting for the municipality escort, and early test data shows false "occupied" readings when bays sit in direct afternoon sun. The team agreed to move the pilot launch readiness review into the next sprint and to load test before the steering committee demo.
+
+DISCUSSION
+- Demo: Noura showed the live map on iOS and Android with mock availability data. Arabic right-to-left layout works end to end.
+- Ali demoed the WebSocket feed; latency under 300 ms in staging. API documentation is still incomplete.
+- Omar: 12 of 50 sensors tested on a rooftop lot; around 8% false positives between 1pm and 4pm, likely heat related.
+- Fahad: the Olaya permit is with the traffic department; escalation requested.
+- Khalid: CI suite is about 60% done; no load testing yet.
+- Velocity: 34 of 40 story points completed.
+
+DECISION: Keep the pilot launch target of 2026-12-06, but hold a go/no-go readiness review in early November.
+DECISION: Add a 15-minute booking hold with one 10-minute extension.
+DECISION: Sensor firmware gets a temperature-compensation patch before wider installation.
+
+ACTION: Ali - finish API docs - 2026-11-05
+ACTION: Omar - fix sensor false positives caused by afternoon heat - 2026-10-26 - High
+ACTION: Noura - add booking countdown timer and extension flow - 2026-11-04 - High
+ACTION: Khalid - run load test for 5,000 concurrent users - 2026-11-10 - Medium
+ACTION: Sara - schedule pilot launch readiness review - 2026-11-02 - Medium
+ACTION: Lina - redesign empty-state and error screens - 2026-10-29 - Low

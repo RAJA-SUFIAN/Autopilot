@@ -1,0 +1,27 @@
+TITLE: Design Review & Stakeholder Sync
+DATE: 2026-10-08
+ATTENDEES: Sara Al-Qahtani <sara.alqahtani@example.com>, Ali Hassan <ali.hassan@example.com>, Noura Al-Harbi <noura.alharbi@example.com>, Omar Farooq <omar.farooq@example.com>, Lina Haddad <lina.haddad@example.com>, Khalid Al-Mutairi <khalid.almutairi@example.com>, Fahad Al-Dosari <fahad.aldosari@example.com>
+
+SUMMARY: Lina presented the wireframes and the stakeholders approved the map-first home screen with a bottom-sheet booking flow. The 50 pilot sensors have arrived and will be installed in the KAFD test lot once site access is confirmed. The main risk raised was the Olaya site-access permit, which is on the critical path for the pilot. The steering committee demo was set for the first week of November.
+
+DISCUSSION
+- Wireframes received positive feedback; Fahad asked for colour-blind-safe availability colours (not only red/green).
+- Payment vendor shortlist narrowed to two providers; both support Mada and Apple Pay, final pricing still pending.
+- Omar confirmed sensors arrived on 2026-09-29. Installation needs a municipality escort and a 3-day calibration window.
+- Khalid wants automated tests running in CI before any build goes to pilot testers.
+- Usability testing with real drivers to happen before the steering committee demo.
+
+DECISION: Approve the map-first home screen with bottom-sheet booking.
+DECISION: Use a blue/orange availability palette for colour-blind accessibility.
+DECISION: Real-time availability will be pushed over WebSockets, with polling as a fallback.
+DECISION: Steering committee demo in the first week of November.
+
+ACTION: Lina - finalize high-fidelity UI designs in Figma - 2026-10-19 - High
+ACTION: Ali - build real-time availability API over WebSockets - 2026-10-25 - High
+ACTION: Omar - install and calibrate sensors in the KAFD test lot - 2026-10-21 - High
+ACTION: Noura - implement the live parking map screen - 2026-10-26 - High
+ACTION: Fahad - obtain site access permits for the Olaya zone - 2026-10-16 - High
+ACTION: Khalid - set up automated test suite in CI - 2026-10-25 - Medium
+ACTION: Sara - prepare the steering committee demo deck - 2026-10-30 - Medium
+ACTION: Noura - integrate Mada and Apple Pay sandbox - 2026-11-06 - High
+ACTION: Lina - run usability test with 5 Riyadh drivers - 2026-11-03 - Medium

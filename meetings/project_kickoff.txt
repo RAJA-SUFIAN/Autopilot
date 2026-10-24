@@ -1,0 +1,27 @@
+TITLE: Project Kickoff - Riyadh Smart Parking App
+DATE: 2026-09-14
+ATTENDEES: Sara Al-Qahtani <sara.alqahtani@example.com>, Ali Hassan <ali.hassan@example.com>, Noura Al-Harbi <noura.alharbi@example.com>, Omar Farooq <omar.farooq@example.com>, Lina Haddad <lina.haddad@example.com>, Khalid Al-Mutairi <khalid.almutairi@example.com>, Fahad Al-Dosari <fahad.aldosari@example.com>
+
+SUMMARY: Kickoff for the Riyadh Smart Parking App, a mobile app that shows real-time parking availability in KAFD and Olaya using IoT bay sensors, with in-app booking and payment. The team aligned on MVP scope, a 12-week plan to a pilot launch in early December, and the core technology stack. Fahad (municipality product owner) confirmed the success metric: cut average search time for a parking spot by 30% in the pilot zones.
+
+DISCUSSION
+- Fahad walked through the municipality's goals: less congestion around KAFD towers at peak hours, and better data on bay utilisation for future pricing decisions.
+- Omar compared magnetometer and ultrasonic bay sensors. Magnetometers are cheaper and survive summer heat better; ultrasonic sensors are more accurate in covered car parks.
+- Lina raised that most drivers will use the app while driving, so the map must be glanceable and voice prompts should be considered post-MVP.
+- Ali flagged PDPL (Saudi Personal Data Protection Law) requirements for storing licence plates and payment tokens.
+- Agreed MVP scope: live availability map, bay booking (15-minute hold), Mada / Apple Pay payment, Arabic and English UI.
+
+DECISION: MVP covers the KAFD and Olaya pilot zones only (approx. 1,200 bays).
+DECISION: Build the mobile app in Flutter (iOS and Android from one codebase).
+DECISION: Backend on FastAPI with PostgreSQL/PostGIS, hosted in a Saudi cloud region for data residency.
+DECISION: Two-week sprints with a sprint review every other Thursday.
+
+ACTION: Sara - publish project charter and RACI matrix - 2026-09-18 - High
+ACTION: Ali - set up backend repo, CI pipeline and dev environment - 2026-09-25 - High
+ACTION: Omar - order 50 pilot sensors for the KAFD test lot - 2026-09-30 - High
+ACTION: Lina - deliver low-fidelity wireframes for the map and booking flow - 2026-10-02 - Medium
+ACTION: Noura - scaffold the Flutter app with Arabic/English localization - 2026-10-05 - Medium
+ACTION: Fahad - share municipality parking zone GIS data - 2026-09-28 - High
+ACTION: Khalid - draft the QA test strategy - 2026-10-09 - Medium
+ACTION: Sara - confirm payment gateway vendor for Mada and Apple Pay - 2026-10-15 - High
+ACTION: Ali - document data residency and PDPL compliance approach - 2026-10-28 - Medium
