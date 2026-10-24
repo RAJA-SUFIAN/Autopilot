@@ -5,7 +5,7 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue) ![Tests](https://img.shields.io/badge/tests-pytest-green) ![AI](https://img.shields.io/badge/AI-Google%20Gemini%20(optional)-orange) ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
 - **Free.** Runs on your computer. The AI part (Google Gemini) has a free tier, and it's optional.
-- **Safe by default.** Nothing is emailed until you switch it on. Until then, every email is saved for you to preview.
+- **Safe by default.** Nothing is emailed until you switch it on. Until then, every email is saved for you to preview. Once it's on, it still asks before sending.
 - **Simple.** One install command, plain-text meeting notes, and a CSV task list you can open in Excel.
 
 ![Outbox viewer](docs/screenshots/outbox_viewer.png)
@@ -147,7 +147,7 @@ python main.py weekly-report    # e.g. every Thursday
 | `python main.py serve [--port 8765]` | Browse the generated emails in your browser. |
 | `python main.py demo` | Run process, reminders, weekly report and schedule on the sample project. |
 
-Every command accepts `--today YYYY-MM-DD` to pretend it's another date, which is handy for testing. Run `python main.py <command> -h` for help on any command.
+Every command accepts `--today YYYY-MM-DD` to pretend it's another date, which is handy for testing, and `--yes` to skip confirmation questions. Run `python main.py <command> -h` for help on any command.
 
 ## Optional: AI parsing and real email sending
 
@@ -179,6 +179,8 @@ Gmail needs an **App Password**, not your normal password:
    ```
 4. Send yourself a test: `python main.py check --send-test`
 
+With sending on, every command **shows who will be emailed and asks `Send now? [y/N]`** before anything goes out. Add `--yes` to skip the question, for example in scheduled runs.
+
 > **Before emailing your team for real,** run a command once with `SEND_EMAILS=false` and preview the results with `python main.py serve`.
 
 Your `.env` file is listed in `.gitignore`, so your keys are never committed.
@@ -190,16 +192,18 @@ Your `.env` file is listed in `.gitignore`, so your keys are never committed.
 1. Open *Task Scheduler*, then choose *Create Basic Task*, name it "PM reminders", and set the trigger to *Daily* at 08:00.
 2. Action: *Start a program*.
    - Program: the full path to `python.exe`. Run `where python` in a terminal to find it.
-   - Arguments: `main.py reminders`
+   - Arguments: `main.py reminders --yes`
    - Start in: the folder where you cloned pm-autopilot.
-3. Repeat for `main.py weekly-report` with a *Weekly* trigger.
+3. Repeat for `main.py weekly-report --yes` with a *Weekly* trigger.
 
 **macOS / Linux: cron** (run `crontab -e`)
 
 ```cron
-0 8 * * 1-5  cd /path/to/pm-autopilot && /usr/bin/python3 main.py reminders
-0 9 * * 4    cd /path/to/pm-autopilot && /usr/bin/python3 main.py weekly-report
+0 8 * * 1-5  cd /path/to/pm-autopilot && /usr/bin/python3 main.py reminders --yes
+0 9 * * 4    cd /path/to/pm-autopilot && /usr/bin/python3 main.py weekly-report --yes
 ```
+
+`--yes` is needed because nobody is there to answer the "Send now?" question. Without it, a scheduled run sends nothing and prints a message saying so.
 
 ## Troubleshooting
 
@@ -211,6 +215,7 @@ Your `.env` file is listed in `.gitignore`, so your keys are never committed.
 | Owner gets no emails | Their email is missing. Add them to `ATTENDEES` in the notes, or run `python main.py update T-005 --email them@company.com`. |
 | `Gmail login rejected` | Use an **App Password**, not your normal password. 2-Step Verification must be on. |
 | Gemini errors / quota | The tool automatically falls back to the rule-based parser. Run `python main.py check` to see the exact error. |
+| Scheduled run sent nothing | Add `--yes` to the command in Task Scheduler / cron. Real sending asks for confirmation otherwise. |
 | Port 8765 is busy | `serve` picks the next free port automatically, or use `--port 9000`. |
 | I want the sample data back | `git checkout data/tasks.csv` |
 

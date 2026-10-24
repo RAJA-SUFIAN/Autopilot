@@ -78,6 +78,47 @@ def test_comment_lines_in_notes_are_ignored(workspace):
     assert main.main(["process", str(notes), "--no-emails"]) == 0
 
 
+class _FakeTTY:
+    def isatty(self):
+        return True
+
+
+@pytest.fixture
+def smtp_workspace(workspace, monkeypatch):
+    """Real-sending mode with SMTP replaced by a recorder - nothing touches the network."""
+    monkeypatch.setenv("SEND_EMAILS", "true")
+    monkeypatch.setenv("GMAIL_ADDRESS", "me@gmail.com")
+    monkeypatch.setenv("GMAIL_APP_PASSWORD", "abcd efgh ijkl mnop")
+    sent = []
+    monkeypatch.setattr(main.Mailer, "_send_smtp", lambda self, emails: sent.extend(emails) or ["sent"] * len(emails))
+    return sent
+
+
+def test_real_sending_is_refused_without_terminal_or_yes(smtp_workspace, capsys):
+    assert main.main(["reminders", "--today", "2026-10-24"]) == 0
+    assert smtp_workspace == []
+    assert "Add --yes" in capsys.readouterr().err
+
+
+def test_real_sending_with_yes_flag(smtp_workspace):
+    assert main.main(["reminders", "--today", "2026-10-24", "--yes"]) == 0
+    assert len(smtp_workspace) == 6
+
+
+@pytest.mark.parametrize("answer, expected", [("y", 6), ("n", 0), ("", 0)])
+def test_real_sending_asks_first(smtp_workspace, monkeypatch, capsys, answer, expected):
+    monkeypatch.setattr("sys.stdin", _FakeTTY())
+    monkeypatch.setattr("builtins.input", lambda prompt: answer)
+    main.main(["reminders", "--today", "2026-10-24"])
+    assert len(smtp_workspace) == expected
+    assert "About to SEND 6 real email(s)" in capsys.readouterr().out
+
+
+def test_demo_mode_never_asks(workspace, monkeypatch):
+    monkeypatch.setattr("builtins.input", lambda prompt: pytest.fail("should not prompt in demo mode"))
+    assert main.main(["reminders", "--today", "2026-10-24"]) == 0
+
+
 def test_server_moves_to_next_free_port():
     blocker = socket.socket()
     blocker.bind(("127.0.0.1", 0))

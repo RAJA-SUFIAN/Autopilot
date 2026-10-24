@@ -44,8 +44,32 @@ def rel(path: Path | str) -> str:
         return str(path)
 
 
-def deliver(mailer: Mailer, emails: list) -> None:
+def confirm_send(emails: list, assume_yes: bool) -> bool:
+    """Real sending only: show who will be emailed and ask first, unless --yes was given."""
+    if assume_yes:
+        return True
+    recipients = sorted({address for email in emails for address in email.to})
+    print(f"\nAbout to SEND {len(emails)} real email(s) to {len(recipients)} recipient(s):")
+    for email in emails:
+        print(f"  - {email.subject}  ->  {', '.join(email.to)}")
+    if not sys.stdin or not sys.stdin.isatty():
+        print("Not sent: no terminal to confirm in. Add --yes to send without asking "
+              "(e.g. in Task Scheduler / cron).", file=sys.stderr)
+        return False
+    try:
+        answer = input("Send now? [y/N] ").strip().lower()
+    except EOFError:
+        answer = ""
+    if answer not in {"y", "yes"}:
+        print("Cancelled - nothing was sent.")
+        return False
+    return True
+
+
+def deliver(mailer: Mailer, emails: list, assume_yes: bool = False) -> None:
     target = f"DEMO MODE -> {rel(mailer.settings.outbox_dir)}/" if mailer.mode == "demo" else "Gmail SMTP"
+    if mailer.mode == "smtp" and not confirm_send([e for e in emails if e.to], assume_yes):
+        return
     results = mailer.deliver(emails)
     print(f"Emails ({len(results)}, {target}):")
     for line in results:
@@ -80,7 +104,7 @@ def cmd_process(args, settings: Settings) -> int:
     if args.no_emails:
         return 0
     emails = [mom_email(meeting, meeting_tasks, settings), *followup_emails(meeting, meeting_tasks, settings)]
-    deliver(Mailer(settings), emails)
+    deliver(Mailer(settings), emails, args.yes)
     return 0
 
 
@@ -89,7 +113,7 @@ def cmd_reminders(args, settings: Settings) -> int:
     emails = build_reminders(tasks, args.today, settings, window_days=args.window)
     print(f"Reminders for {args.today} (overdue or due within {args.window} days): {len(emails)} owner(s)")
     if emails:
-        deliver(Mailer(settings), emails)
+        deliver(Mailer(settings), emails, args.yes)
     return 0
 
 
@@ -101,7 +125,7 @@ def cmd_weekly_report(args, settings: Settings) -> int:
     print(f"  {report.rag_reason}")
     print(f"  Total {report.total} | Done {report.done} | In progress {report.in_progress} | "
           f"Overdue {len(report.overdue)} | Blocked {report.blocked} | Not started {report.not_started}")
-    deliver(Mailer(settings), [weekly_report_email(report, recipients, settings)])
+    deliver(Mailer(settings), [weekly_report_email(report, recipients, settings)], args.yes)
     return 0
 
 
@@ -126,7 +150,7 @@ def cmd_schedule(args, settings: Settings) -> int:
     print(f"Scheduled '{invite.title}' on {start:%a %d %b %Y %H:%M} (UTC{invite.utc_offset}), "
           f"{invite.duration_minutes} min, {len(attendees)} attendee(s)")
     mailer = Mailer(settings)
-    deliver(mailer, [invite_email(invite, ics, settings)])
+    deliver(mailer, [invite_email(invite, ics, settings)], args.yes)
     if mailer.mode == "demo":
         print(f"  {rel(settings.outbox_dir / (invite.slug + '.ics'))}  <- open to add to your calendar")
     return 0
@@ -226,14 +250,16 @@ def cmd_serve(args, settings: Settings) -> int:
 def cmd_demo(args, settings: Settings) -> int:
     steps = [
         ("process", lambda: cmd_process(argparse.Namespace(file=str(ROOT / "meetings" / "sprint_review.txt"),
-                                                           no_emails=False, today=args.today), settings)),
-        ("reminders", lambda: cmd_reminders(argparse.Namespace(today=args.today, window=2), settings)),
+                                                           no_emails=False, today=args.today, yes=args.yes),
+                                                        settings)),
+        ("reminders", lambda: cmd_reminders(argparse.Namespace(today=args.today, window=2, yes=args.yes), settings)),
         ("weekly-report", lambda: cmd_weekly_report(args, settings)),
         ("schedule", lambda: cmd_schedule(argparse.Namespace(
             title="Sprint 4 Planning", date="2026-11-02", time="10:00", duration=90, location="KAFD Office, Room 3B",
             attendees="sara.alqahtani@example.com,ali.hassan@example.com,noura.alharbi@example.com,"
                       "omar.farooq@example.com,lina.haddad@example.com,khalid.almutairi@example.com",
             agenda="Sprint 3 retro highlights; Review pilot launch blockers; Capacity and sprint goal; Commit sprint backlog",
+            yes=args.yes,
         ), settings)),
     ]
     for name, run in steps:
@@ -257,6 +283,8 @@ def build_parser() -> argparse.ArgumentParser:
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--today", type=iso_date, default=date.today(),
                         help="pretend today is YYYY-MM-DD (reproducible demos)")
+    common.add_argument("--yes", "-y", action="store_true",
+                        help="don't ask for confirmation (for real sending / reset; use in scheduled runs)")
 
     parser = argparse.ArgumentParser(prog="pm-autopilot", description="Project management automation.")
     sub = parser.add_subparsers(dest="command", metavar="<command>")
@@ -305,7 +333,6 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(func=cmd_update)
 
     p = sub.add_parser("reset", parents=[common], help="empty the task tracker (with backup) to start your own project")
-    p.add_argument("--yes", action="store_true", help="confirm")
     p.set_defaults(func=cmd_reset)
 
     p = sub.add_parser("check", parents=[common], help="verify your setup (.env, Gemini key, Gmail login)")
