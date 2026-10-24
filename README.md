@@ -57,8 +57,8 @@ You need **Python 3.10 or newer** ([download](https://www.python.org/downloads/)
 
 ```bash
 # 1. Get the code
-git clone https://github.com/RAJA-SUFIAN/pm-autopilot.git
-cd pm-autopilot
+git clone https://github.com/RAJA-SUFIAN/Autopilot.git
+cd Autopilot
 
 # 2. Install (one small dependency)
 pip install -r requirements.txt
@@ -193,14 +193,14 @@ Your `.env` file is listed in `.gitignore`, so your keys are never committed.
 2. Action: *Start a program*.
    - Program: the full path to `python.exe`. Run `where python` in a terminal to find it.
    - Arguments: `main.py reminders --yes`
-   - Start in: the folder where you cloned pm-autopilot.
+   - Start in: the folder where you cloned Autopilot.
 3. Repeat for `main.py weekly-report --yes` with a *Weekly* trigger.
 
 **macOS / Linux: cron** (run `crontab -e`)
 
 ```cron
-0 8 * * 1-5  cd /path/to/pm-autopilot && /usr/bin/python3 main.py reminders --yes
-0 9 * * 4    cd /path/to/pm-autopilot && /usr/bin/python3 main.py weekly-report --yes
+0 8 * * 1-5  cd /path/to/Autopilot && /usr/bin/python3 main.py reminders --yes
+0 9 * * 4    cd /path/to/Autopilot && /usr/bin/python3 main.py weekly-report --yes
 ```
 
 `--yes` is needed because nobody is there to answer the "Send now?" question. Without it, a scheduled run sends nothing and prints a message saying so.
